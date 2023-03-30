@@ -29,30 +29,28 @@ SELECT au_fname AS first_name, au_lname AS last_name, phone AS telephone  FROM a
 ### *e)* Consulta definida em d) mas só os autores da Califórnia (CA) cujo último nome é diferente de ‘Ringer’; 
 
 ```
-SELECT au_fname AS first_name, au_lname AS last_name, phone AS telephone
-FROM authors
-WHERE au_lname!='Ringer' AND state='CA'
-ORDER BY au_fname, au_lname
+... Write here your answer ...
 ```
 
 ### *f)* Todas as editoras (publishers) que tenham ‘Bo’ em qualquer parte do nome; 
 
 ```
-SELECT * FROM publishers WHERE pub_name LIKE '%Bo%'
+... Write here your answer ...
 ```
 
 ### *g)* Nome das editoras que têm pelo menos uma publicação do tipo ‘Business’; 
 
 ```
-SELECT *
-FROM publishers JOIN titles
-ON (publishers.pub_id=titles.pub_id AND type='business')
+... Write here your answer ...
 ```
 
 ### *h)* Número total de vendas de cada editora; 
 
 ```
-... Write here your answer ...
+SELECT pub_name, SUM(ytd_sales)
+FROM publishers JOIN titles
+ON (publishers.pub_id=titles.pub_id)
+GROUP BY pub_name
 ```
 
 ### *i)* Número total de vendas de cada editora agrupado por título; 
@@ -64,11 +62,7 @@ ON (publishers.pub_id=titles.pub_id AND type='business')
 ### *j)* Nome dos títulos vendidos pela loja ‘Bookbeat’; 
 
 ```
-SELECT title
-FROM sales
-    JOIN stores ON stores.stor_id = sales.stor_id
-    JOIN titles ON sales.title_id = titles.title_id
-WHERE stor_name='Bookbeat'
+... Write here your answer ...
 ```
 
 ### *k)* Nome de autores que tenham publicações de tipos diferentes; 
