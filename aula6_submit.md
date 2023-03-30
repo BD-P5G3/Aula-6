@@ -42,8 +42,8 @@ SELECT * FROM publishers WHERE pub_name LIKE '%Bo%'
 
 ```
 SELECT *
-FROM publishers, titles
-WHERE publishers.pub_id=titles.pub_id AND type='business'
+FROM publishers JOIN titles
+ON (publishers.pub_id=titles.pub_id AND type='business')
 ```
 
 ### *h)* Número total de vendas de cada editora; 
