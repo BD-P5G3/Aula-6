@@ -29,19 +29,24 @@ SELECT au_fname AS first_name, au_lname AS last_name, phone AS telephone  FROM a
 ### *e)* Consulta definida em d) mas só os autores da Califórnia (CA) cujo último nome é diferente de ‘Ringer’; 
 
 ```
-... Write here your answer ...
+SELECT au_fname AS first_name, au_lname AS last_name, phone AS telephone
+FROM authors
+WHERE au_lname!='Ringer' AND state='CA'
+ORDER BY au_fname, au_lname
 ```
 
 ### *f)* Todas as editoras (publishers) que tenham ‘Bo’ em qualquer parte do nome; 
 
 ```
-... Write here your answer ...
+SELECT * FROM publishers WHERE pub_name LIKE '%Bo%'
 ```
 
 ### *g)* Nome das editoras que têm pelo menos uma publicação do tipo ‘Business’; 
 
 ```
-... Write here your answer ...
+SELECT *
+FROM publishers JOIN titles
+ON (publishers.pub_id=titles.pub_id AND type='business')
 ```
 
 ### *h)* Número total de vendas de cada editora; 
