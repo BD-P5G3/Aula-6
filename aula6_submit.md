@@ -61,13 +61,22 @@ GROUP BY pub_name
 ### *i)* Número total de vendas de cada editora agrupado por título; 
 
 ```
-... Write here your answer ...
+SELECT pub_name, title, SUM(ytd_sales)
+FROM publishers JOIN titles
+ON (publishers.pub_id=titles.pub_id)
+GROUP BY pub_name, title
+ORDER BY pub_name
 ```
 
 ### *j)* Nome dos títulos vendidos pela loja ‘Bookbeat’; 
 
 ```
-... Write here your answer ...
+SELECT title
+FROM titles
+INNER JOIN sales ON titles.title_id = sales.title_id
+INNER JOIN stores ON sales.stor_id = stores.stor_id
+WHERE stores.stor_name = 'Bookbeat'
+ORDER BY titles.title
 ```
 
 ### *k)* Nome de autores que tenham publicações de tipos diferentes; 
