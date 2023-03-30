@@ -41,7 +41,9 @@ SELECT * FROM publishers WHERE pub_name LIKE '%Bo%'
 ### *g)* Nome das editoras que têm pelo menos uma publicação do tipo ‘Business’; 
 
 ```
-... Write here your answer ...
+SELECT *
+FROM publishers, titles
+WHERE publishers.pub_id=titles.pub_id AND type='business'
 ```
 
 ### *h)* Número total de vendas de cada editora; 
