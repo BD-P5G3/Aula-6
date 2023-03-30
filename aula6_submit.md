@@ -64,7 +64,11 @@ ON (publishers.pub_id=titles.pub_id AND type='business')
 ### *j)* Nome dos títulos vendidos pela loja ‘Bookbeat’; 
 
 ```
-... Write here your answer ...
+SELECT title
+FROM sales
+    JOIN stores ON stores.stor_id = sales.stor_id
+    JOIN titles ON sales.title_id = titles.title_id
+WHERE stor_name='Bookbeat'
 ```
 
 ### *k)* Nome de autores que tenham publicações de tipos diferentes; 
