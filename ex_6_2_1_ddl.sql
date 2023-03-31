@@ -3,9 +3,18 @@
 DROP TABLE IF EXISTS COMPANY.DEPENDENT
 DROP TABLE IF EXISTS COMPANY.WORKS_ON;
 DROP TABLE IF EXISTS COMPANY.PROJECT;
-DROP TABLE IF EXISTS COMPANY.DEPT_LOCATIONS;
-DROP TABLE IF EXISTS COMPANY.DEPARTMENT;
+DROP TABLE IF EXISTS COMPANY.DEP_LOCATIONS;
+
+IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'DEPARTMENT')
+    BEGIN
+        IF EXISTS(SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME = 'mgr_ssn')
+            BEGIN
+                ALTER TABLE COMPANY.DEPARTMENT DROP CONSTRAINT mgr_ssn
+            END
+    END
+
 DROP TABLE IF EXISTS COMPANY.EMPLOYEE;
+DROP TABLE IF EXISTS COMPANY.DEPARTMENT;
 DROP SCHEMA IF EXISTS COMPANY;
 GO
 
@@ -15,14 +24,12 @@ GO;
 CREATE TABLE COMPANY.DEPARTMENT (
     d_name          VARCHAR(15)     NOT NULL,
     d_number        INT             NOT NULL        PRIMARY KEY,
-    mgr_ssn         CHAR(9)         NOT NULL,
+    mgr_ssn         INT             NOT NULL,
     mgr_start_date  DATE,
-
-    --FOREIGN KEY (mgr_ssn) REFERENCES COMPANY.EMPLOYEE(ssn)
 );
 
 CREATE TABLE COMPANY.EMPLOYEE (
-    ssn             CHAR(9)         NOT NULL        PRIMARY KEY,
+    ssn             INT             NOT NULL        PRIMARY KEY,
     f_name          VARCHAR(15)     NOT NULL,
     m_init          CHAR,
     l_name          VARCHAR(15)     NOT NULL,
@@ -30,7 +37,7 @@ CREATE TABLE COMPANY.EMPLOYEE (
     address         VARCHAR(50),
     sex             CHAR,
     salary          DECIMAL(10,2)   DEFAULT 0       CHECK(salary > 12),
-    super_ssn       CHAR(9),
+    super_ssn       INT,
     dno             INT             NOT NULL,
 
     FOREIGN KEY (super_ssn) REFERENCES COMPANY.EMPLOYEE(ssn),
@@ -57,7 +64,7 @@ CREATE TABLE COMPANY.PROJECT (
 );
 
 CREATE TABLE COMPANY.WORKS_ON (
-    essn            CHAR(9)         NOT NULL,
+    essn            INT             NOT NULL,
     pno             INT             NOT NULL,
     hours           DECIMAL(3,1)    NOT NULL,
 
@@ -67,7 +74,7 @@ CREATE TABLE COMPANY.WORKS_ON (
 );
 
 CREATE TABLE COMPANY.DEPENDENT (
-    essn            CHAR(9)         NOT NULL,
+    essn            INT             NOT NULL,
     dependent_name  VARCHAR(15)     NOT NULL,
     sex             CHAR,
     birth_date      DATE,
