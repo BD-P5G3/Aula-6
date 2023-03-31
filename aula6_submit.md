@@ -132,31 +132,64 @@ ORDER BY title, au_fname, au_lname
 ### *o)* Obter uma lista que incluía o número de vendas de um título (ytd_sales), o seu nome, a faturação total, o valor da faturação relativa aos autores e o valor da faturação relativa à editora;
 
 ```
-... Write here your answer ...
+SELECT DISTINCT titles.title, ytd_sales,
+       ytd_sales * price AS facturacao,
+       ytd_sales * royalty * price / 100 AS auths_revenue,
+       ytd_sales * price * (100 - royalty) / 100 AS pub_revenue
+FROM titles
+INNER JOIN sales ON titles.title_id = sales.title_id;
 ```
 
 ### *p)* Obter uma lista que incluía o número de vendas de um título (ytd_sales), o seu nome, o nome de cada autor, o valor da faturação de cada autor e o valor da faturação relativa à editora;
 
 ```
-... Write here your answer ...
+SELECT DISTINCT titles.title, au_fname + ' ' + au_lname AS name, ytd_sales,
+				ytd_sales * price AS faturacao,
+				ytd_sales * royalty * price/100 AS authors_revenue,
+				ytd_sales * price * (100-royalty)/100 AS publisher_revenue
+FROM titles
+INNER JOIN sales ON titles.title_id = sales.title_id
+INNER JOIN titleauthor ON titles.title_id = titleauthor.title_id
+INNER JOIN authors a on titleauthor.au_id = a.au_id
 ```
 
 ### *q)* Lista de lojas que venderam pelo menos um exemplar de todos os livros;
 
 ```
-... Write here your answer ...
+SELECT stores.stor_name, COUNT(DISTINCT titles.title) AS different
+FROM stores
+INNER JOIN sales ON stores.stor_id = sales.stor_id
+INNER JOIN titles ON sales.title_id = titles.title_id
+GROUP BY stores.stor_name
+HAVING COUNT(DISTINCT titles.title) = (SELECT COUNT(titles.title) FROM titles);
 ```
 
 ### *r)* Lista de lojas que venderam mais livros do que a média de todas as lojas;
 
 ```
-... Write here your answer ...
+SELECT stor_name, sum(qty) AS sum_qty
+FROM sales JOIN stores
+ON sales.stor_id=stores.stor_id
+GROUP BY stor_name
+HAVING sum(qty) > (	SELECT avg(sum_qty)
+						FROM (	SELECT sum(qty) AS sum_qty, stor_id AS stid
+								FROM sales
+								GROUP BY stor_id) as T
+					);
 ```
 
 ### *s)* Nome dos títulos que nunca foram vendidos na loja “Bookbeat”;
 
 ```
-... Write here your answer ...
+SELECT titles.title
+FROM titles
+LEFT JOIN (
+    SELECT sales.title_id
+    FROM sales
+    INNER JOIN stores ON sales.stor_id = stores.stor_id
+    WHERE stores.stor_name = 'Bookbeat'
+) AS bookbeat_sales ON titles.title_id = bookbeat_sales.title_id
+WHERE bookbeat_sales.title_id IS NULL;
 ```
 
 ### *t)* Para cada editora, a lista de todas as lojas que nunca venderam títulos dessa editora; 
