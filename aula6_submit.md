@@ -99,19 +99,34 @@ ORDER BY authors.au_lname, authors.au_fname;
 ### *l)* Para os títulos, obter o preço médio e o número total de vendas agrupado por tipo (type) e editora (pub_id);
 
 ```
-... Write here your answer ...
+SELECT type AS book_type, pub_name AS publisher, AVG(titles.price) AS price_avg, SUM(ytd_sales) AS total_sales
+FROM titles JOIN publishers ON titles.pub_id = publishers.pub_id
+GROUP BY type, pub_name
+HAVING AVG(titles.price) IS NOT NULL;
 ```
 
 ### *m)* Obter o(s) tipo(s) de título(s) para o(s) qual(is) o máximo de dinheiro “à cabeça” (advance) é uma vez e meia superior à média do grupo (tipo);
 
 ```
-... Write here your answer ...
+SELECT title, advance, average
+FROM titles JOIN (
+                 SELECT titles.type, AVG(advance) AS average
+		         FROM titles
+			     WHERE advance IS NOT NULL
+			     GROUP BY titles.type
+			) AS grp
+ON titles.type = grp.type AND advance > 1.5*average;
 ```
 
 ### *n)* Obter, para cada título, nome dos autores e valor arrecadado por estes com a sua venda;
 
 ```
-... Write here your answer ...
+SELECT title, au_fname AS first_name, au_lname AS last_name, sum(ytd_sales) AS money_made
+FROM authors JOIN titleauthor ON authors.au_id = titleauthor.au_id
+JOIN titles ON titles.title_id = titleauthor.title_id
+JOIN sales ON titles.title_id = sales.title_id
+GROUP BY title, au_fname, au_lname
+ORDER BY title, au_fname, au_lname
 ```
 
 ### *o)* Obter uma lista que incluía o número de vendas de um título (ytd_sales), o seu nome, a faturação total, o valor da faturação relativa aos autores e o valor da faturação relativa à editora;
