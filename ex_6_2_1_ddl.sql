@@ -13,16 +13,16 @@ CREATE SCHEMA COMPANY;
 GO;
 
 CREATE TABLE COMPANY.DEPARTMENT (
-    d_name          VARCHAR(15)     NOT NULL        PRIMARY KEY,
-    d_number        INT             NOT NULL,
+    d_name          VARCHAR(15)     NOT NULL,
+    d_number        INT             NOT NULL        PRIMARY KEY,
     mgr_ssn         CHAR(9)         NOT NULL,
     mgr_start_date  DATE,
 
-    FOREIGN KEY (mgr_ssn) REFERENCES COMPANY.EMPLOYEE(ssn)
+    --FOREIGN KEY (mgr_ssn) REFERENCES COMPANY.EMPLOYEE(ssn)
 );
 
 CREATE TABLE COMPANY.EMPLOYEE (
-    ssn             CHAR(9)             NOT NULL         PRIMARY KEY,
+    ssn             CHAR(9)         NOT NULL        PRIMARY KEY,
     f_name          VARCHAR(15)     NOT NULL,
     m_init          CHAR,
     l_name          VARCHAR(15)     NOT NULL,
@@ -34,8 +34,10 @@ CREATE TABLE COMPANY.EMPLOYEE (
     dno             INT             NOT NULL,
 
     FOREIGN KEY (super_ssn) REFERENCES COMPANY.EMPLOYEE(ssn),
-    FOREIGN KEY(dno) REFERENCES COMPANY.DEPARTMENT(d_number),
+    FOREIGN KEY (dno) REFERENCES COMPANY.DEPARTMENT(d_number),
 );
+
+ALTER TABLE COMPANY.DEPARTMENT ADD CONSTRAINT mgr_ssn FOREIGN KEY (mgr_ssn) REFERENCES COMPANY.EMPLOYEE(ssn);
 
 CREATE TABLE COMPANY.DEP_LOCATIONS (
     d_number        INT             NOT NULL,
