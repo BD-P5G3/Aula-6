@@ -352,27 +352,43 @@ FROM COMPANY.EMPLOYEE AS E
 ##### *a)*
 
 ```
-... Write here your answer ...
+SELECT nif, nome, fax, endereco, condpag, tipo
+FROM GESTSTOCK.FORNECEDOR AS F
+    LEFT OUTER JOIN GESTSTOCK.ENCOMENDA E ON F.nif = E.fornecedor
+WHERE numero IS NULL
 ```
 
 ##### *b)* 
 
 ```
-... Write here your answer ...
+SELECT nome, AVG(I.unidades) AS sumUnidades
+FROM GESTSTOCK.ITEM AS I
+    JOIN (SELECT codigo, nome FROM GESTSTOCK.PRODUTO) as P
+    ON I.codProd = P.codigo
+GROUP BY codProd, nome
+ORDER BY nome
 ```
 
 
 ##### *c)* 
 
 ```
-... Write here your answer ...
+SELECT AVG(CAST(countProd AS DECIMAL(10,2))) AS average
+FROM (SELECT numEnc, count(*) AS countProd
+    FROM GESTSTOCK.ITEM
+    GROUP BY numEnc) AS CNT
 ```
 
 
 ##### *d)* 
 
 ```
-... Write here your answer ...
+SELECT F.nif, F.nome, I.codProd, P.nome, I.unidades
+FROM GESTSTOCK.ITEM AS I
+    JOIN (SELECT numero, fornecedor FROM GESTSTOCK.ENCOMENDA) AS E ON E.numero = I.numEnc
+    JOIN (SELECT nif, nome FROM GESTSTOCK.FORNECEDOR) AS F ON E.fornecedor = F.nif
+    JOIN (SELECT codigo, nome FROM GESTSTOCK.PRODUTO) AS P ON P.codigo=I.codProd
+ORDER BY nif
 ```
 
 ### 5.3
