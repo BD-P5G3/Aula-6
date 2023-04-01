@@ -37,9 +37,11 @@ CREATE TABLE PRESCRICAO.FARMACEUTICA (
 )
 
 CREATE TABLE PRESCRICAO.FARMACO (
-    numRegFarm      INT             PRIMARY KEY,
-    nome            VARCHAR(50)     NOT NULL,
-    formula         VARCHAR(20)     NOT NULL
+    numRegFarm      INT,
+    nome            VARCHAR(50),
+    formula         VARCHAR(20)     NOT NULL,
+
+    PRIMARY KEY (numRegFarm, nome)
 )
 
 CREATE TABLE PRESCRICAO.PRESCRICAO (
@@ -56,9 +58,11 @@ CREATE TABLE PRESCRICAO.PRESCRICAO (
 
 CREATE TABLE PRESCRICAO.PRESC_FARMACO (
     numPresc        INT,
-    numRegFarm      INT
+    numRegFarm      INT,
+    nomeFarmaco     VARCHAR(50)
 
-    PRIMARY KEY (numPresc, numRegFarm),
+    PRIMARY KEY (numPresc, numRegFarm, nomeFarmaco),
     FOREIGN KEY (numPresc) REFERENCES PRESCRICAO.PRESCRICAO (numPresc) ON UPDATE CASCADE,
-    FOREIGN KEY (numRegFarm) REFERENCES PRESCRICAO.FARMACO (numRegFarm) ON UPDATE CASCADE
+    FOREIGN KEY (numRegFarm) REFERENCES PRESCRICAO.FARMACEUTICA (numReg) ON UPDATE CASCADE,
+    FOREIGN KEY (numRegFarm, nomeFarmaco) REFERENCES PRESCRICAO.FARMACO (numRegFarm, nome) ON UPDATE CASCADE
 )
