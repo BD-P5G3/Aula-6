@@ -223,55 +223,118 @@ FROM publishers JOIN (	SELECT pub_id AS ppid, sales.stor_id, stor_name
 ##### *a)*
 
 ```
-... Write here your answer ...
+SELECT p_number, p_name, ssn, CONCAT(f_name, ' ', m_init, ' ', l_name) AS name
+FROM COMPANY.EMPLOYEE AS E
+    JOIN COMPANY.WORKS_ON WO ON E.ssn = WO.essn
+    JOIN COMPANY.PROJECT P ON WO.pno = P.p_number
+ORDER BY p_number
 ```
 
 ##### *b)* 
 
 ```
-... Write here your answer ...
+SELECT CONCAT(f_name, ' ', m_init, ' ', l_name) AS name
+FROM COMPANY.EMPLOYEE AS E
+    JOIN (SELECT ssn
+          FROM COMPANY.EMPLOYEE
+          WHERE f_name='Carlos' AND m_init='D' AND l_name='Gomes') as SE
+    ON E.super_ssn=SE.ssn;
 ```
 
 ##### *c)* 
 
 ```
-... Write here your answer ...
+SELECT p_name, totalHours
+FROM COMPANY.PROJECT
+    JOIN (SELECT pno, sum(hours) AS totalHours
+          FROM COMPANY.WORKS_ON
+          GROUP BY pno) AS WO
+    ON PROJECT.p_number = WO.pno
 ```
 
 ##### *d)* 
 
 ```
-... Write here your answer ...
+SELECT CONCAT(f_name, ' ', m_init, ' ', l_name) AS name
+FROM COMPANY.EMPLOYEE AS E
+    JOIN (SELECT essn
+          FROM COMPANY.WORKS_ON AS WO
+              JOIN (SELECT p_number
+                  FROM COMPANY.PROJECT
+                  WHERE p_name = 'Aveiro Digital') AS AP
+              ON WO.pno = AP.p_number
+          WHERE hours > 20) AS TWENTYPLUS
+    ON E.ssn = TWENTYPLUS.essn
+WHERE E.dno = 3
 ```
 
 ##### *e)* 
 
 ```
-... Write here your answer ...
+SELECT CONCAT(f_name, ' ', m_init, ' ', l_name) AS name
+FROM COMPANY.EMPLOYEE AS E
+    LEFT JOIN (SELECT essn
+               FROM COMPANY.WORKS_ON) AS WO
+    ON E.ssn = WO.essn
+WHERE essn IS NULL
 ```
 
 ##### *f)* 
 
 ```
-... Write here your answer ...
+SELECT d_name, AVG(salary) AS avgSalary
+FROM COMPANY.EMPLOYEE AS E
+    JOIN (SELECT d_number, d_name FROM COMPANY.DEPARTMENT) AS D
+    ON E.dno = D.d_number
+WHERE sex='F'
+GROUP BY dno, d_name
 ```
 
 ##### *g)* 
 
 ```
-... Write here your answer ...
+SELECT *
+FROM COMPANY.EMPLOYEE AS E
+    JOIN (SELECT essn, COUNT(*) AS depCount
+        FROM COMPANY.DEPENDENT
+        GROUP BY essn
+        HAVING COUNT(*) > 2) AS MTTD
+    ON E.ssn = MTTD.essn
 ```
 
 ##### *h)* 
 
 ```
-... Write here your answer ...
+SELECT DISTINCT CONCAT(f_name, ' ', m_init, ' ', l_name) AS name
+FROM COMPANY.EMPLOYEE AS E
+    JOIN (SELECT mgr_ssn FROM COMPANY.DEPARTMENT) AS D ON E.ssn = D.mgr_ssn
+    LEFT OUTER JOIN (SELECT essn FROM COMPANY.DEPENDENT) AS DP ON E.ssn = DP.essn
+WHERE DP.essn IS NULL
 ```
 
 ##### *i)* 
 
 ```
-... Write here your answer ...
+SELECT CONCAT(f_name, ' ', m_init, ' ', l_name) AS name, address
+FROM COMPANY.EMPLOYEE AS E
+    JOIN (
+        -- Essn of employees working in projects located in Aveiro whose department is not located there
+        SELECT essn
+        FROM COMPANY.WORKS_ON AS WO
+            JOIN (
+                -- Projects in Aveiro whose department is not located there
+                SELECT p_number
+                FROM (SELECT * FROM COMPANY.PROJECT WHERE p_location = 'Aveiro') as P -- Projects in Aveiro
+                    JOIN (
+                        -- Departments not in Aveiro
+                        SELECT d_name, D.d_number
+                        FROM COMPANY.DEPARTMENT AS D
+                            FULL OUTER JOIN (SELECT * FROM COMPANY.DEP_LOCATIONS WHERE d_location='Aveiro') AS DL
+                            ON D.d_number = DL.d_number
+                        WHERE d_location IS NULL) AS DEP_NOT_AV
+                    ON DEP_NOT_AV.d_number=P.d_num) AS AV_PROJ_DEP_NOT_AV
+            ON WO.pno=AV_PROJ_DEP_NOT_AV.p_number) AS ESSN_AV_PROJ_DEP_NOT_AV
+    ON ESSN_AV_PROJ_DEP_NOT_AV.essn=E.ssn
 ```
 
 ### 5.2
