@@ -1,10 +1,9 @@
 INSERT INTO COMPANY.DEPARTMENT(d_name, d_number, mgr_ssn, mgr_start_date)
-    VALUES ('Investigacao',1,21312332,'2010/08/02'),
-           ('Comercial',2,321233765,'2013/05/16'),
-           ('Logistica',3,41124234,'2013/05/16'),
-           ('Recursos Humanos',4,12652121,'2014/04/02'),
+    VALUES ('Investigacao',1,NULL,'2010/08/02'),
+           ('Comercial',2,NULL,'2013/05/16'),
+           ('Logistica',3,NULL,'2013/05/16'),
+           ('Recursos Humanos',4,NULL,'2014/04/02'),
            ('Desporto',5,NULL,NULL);
-SELECT * FROM COMPANY.DEPARTMENT;
 
 INSERT INTO COMPANY.EMPLOYEE (ssn, f_name, m_init, l_name, birth_date, address, sex, salary, super_ssn, dno)
     VALUES (183623612,'Paula','A','Sousa','2001/08/11','Rua da FRENTE','F',1450.00,NULL,3),
@@ -14,6 +13,12 @@ INSERT INTO COMPANY.EMPLOYEE (ssn, f_name, m_init, l_name, birth_date, address, 
            (41124234,'Joao','G','Costa','2001/01/01','Rua YGZ','M',1300.00,21312332,2),
            (12652121,'Ana','L','Silva','1990/03/03','Rua ZIG ZAG','F',1400.00,21312332,2);
 SELECT * FROM COMPANY.EMPLOYEE;
+
+UPDATE COMPANY.DEPARTMENT SET mgr_ssn=21312332 WHERE d_number=1;
+UPDATE COMPANY.DEPARTMENT SET mgr_ssn=321233765 WHERE d_number=2;
+UPDATE COMPANY.DEPARTMENT SET mgr_ssn=41124234 WHERE d_number=3;
+UPDATE COMPANY.DEPARTMENT SET mgr_ssn=12652121 WHERE d_number=4;
+SELECT * FROM COMPANY.DEPARTMENT;
 
 INSERT INTO COMPANY.DEPENDENT(essn, dependent_name, sex, birth_date, relationship)
     VALUES (21312332,'Joana Costa','F','2008/04/01','Filho'),

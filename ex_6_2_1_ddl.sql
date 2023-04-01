@@ -22,9 +22,9 @@ CREATE SCHEMA COMPANY;
 GO;
 
 CREATE TABLE COMPANY.DEPARTMENT (
-    d_name          VARCHAR(15)     NOT NULL,
+    d_name          VARCHAR(50)     NOT NULL,
     d_number        INT             NOT NULL        PRIMARY KEY,
-    mgr_ssn         INT             NOT NULL,
+    mgr_ssn         INT,
     mgr_start_date  DATE,
 );
 
