@@ -406,37 +406,66 @@ ORDER BY nif
 ##### *a)*
 
 ```
-... Write here your answer ...
+SELECT PAC.numUtente, nome, dataNasc, endereco
+FROM PRESCRICAO.PACIENTE AS PAC
+    LEFT OUTER JOIN (SELECT numPresc, numUtente FROM PRESCRICAO.PRESCRICAO) AS PRESC
+    ON PAC.numUtente = PRESC.numUtente
+WHERE numPresc IS NULL
 ```
 
 ##### *b)* 
 
 ```
-... Write here your answer ...
+SELECT M.especialidade, COUNT(*) AS totalPresc
+FROM PRESCRICAO.PRESCRICAO AS P
+    JOIN PRESCRICAO.MEDICO M ON M.numSNS = P.numMedico
+GROUP BY M.especialidade
 ```
 
 
 ##### *c)* 
 
 ```
-... Write here your answer ...
+SELECT nome, COUNT(*) AS countPresc
+FROM PRESCRICAO.FARMACIA AS F
+    JOIN (SELECT numPresc, farmacia FROM PRESCRICAO.PRESCRICAO) AS P
+    ON F.nome = P.farmacia
+GROUP BY nome
 ```
 
 
 ##### *d)* 
 
 ```
-... Write here your answer ...
+(SELECT nome
+ FROM PRESCRICAO.FARMACO
+ WHERE numRegFarm=906)
+EXCEPT
+(SELECT DISTINCT nomeFarmaco
+ FROM PRESCRICAO.PRESC_FARMACO
+ WHERE numRegFarm=906)
 ```
 
 ##### *e)* 
 
 ```
-... Write here your answer ...
+SELECT farmacia, nome, COUNT(nomeFarmaco) AS nFarmacos
+FROM (SELECT numPresc, farmacia FROM PRESCRICAO.PRESCRICAO) AS P
+    JOIN PRESCRICAO.PRESC_FARMACO AS PF ON P.numPresc = PF.numPresc
+    JOIN (SELECT numReg, nome FROM PRESCRICAO.FARMACEUTICA) AS F ON PF.numRegFarm = F.numReg
+WHERE farmacia IS NOT NULL
+GROUP BY farmacia, nome
+ORDER BY farmacia
 ```
 
 ##### *f)* 
 
 ```
-... Write here your answer ...
+SELECT P.numUtente, nome, dataNasc, endereco, numMedicos
+FROM PRESCRICAO.PACIENTE AS P
+    JOIN (SELECT numUtente, COUNT(DISTINCT numMedico) AS numMedicos
+          FROM PRESCRICAO.PRESCRICAO
+          GROUP BY numUtente) AS NUM_MEDICOS
+    ON P.numUtente = NUM_MEDICOS.numUtente
+WHERE numMedicos > 1
 ```
